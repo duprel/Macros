@@ -42,8 +42,10 @@ if (args[0] === "on") {
                         damage: item.data.attackBonus,
                         weapon: itemId,
                         weaponDmg: wpDamage,
+                        magic: false,
                     }
                     );
+                    copy_item.data.properties.mgc = true;
                     copy_item.data.attackBonus = (copy_item.data.attackBonus + bonus);
                     copy_item.data.damage.parts[0][0] = (wpDamage + " + " + bonus);
                     target.actor.updateEmbeddedEntity("OwnedItem", copy_item);
@@ -59,11 +61,12 @@ if (args[0] === "on") {
 
 //Revert weapon and unset flag.
 if (args[0] === "off") {
-    let { damage, weapon, weaponDmg } = target.actor.getFlag('world', 'magicWeapon');
+    let { damage, weapon, weaponDmg, magic } = target.actor.getFlag('world', 'magicWeapon');
     let item = target.actor.items.get(weapon);
     let copy_item = duplicate(item);
     copy_item.data.attackBonus = (copy_item.data.attackBonus - damage);
     copy_item.data.damage.parts[0][0] = weaponDmg;
+    copy_item.data.properties.mgc = magic;
     target.actor.updateEmbeddedEntity("OwnedItem", copy_item);
     target.actor.unsetFlag(`world`, `magicWeapon`);
 }
